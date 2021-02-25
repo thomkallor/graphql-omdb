@@ -1,15 +1,29 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
-
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
-
-export default IndexPage
+import { request, gql } from 'graphql-request'
+export async function getServerSideProps() {
+  const query = gql`
+    {
+      frameworks {
+        id
+        name
+      }
+    }
+  `
+  const data = await request('http://localhost:3000/api/graphql', query)
+  const { frameworks } = data
+  return {
+    props: {
+      frameworks,
+    },
+  }
+}
+export default function Home({ frameworks }:any) {
+  return (
+    <div>
+      <ul>
+        {frameworks.map((f:any) => (
+          <li key={f.id}>{f.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
