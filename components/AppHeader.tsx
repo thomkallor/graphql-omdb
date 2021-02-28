@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { makeVar } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +12,18 @@ import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import Searchbar from './Searchbar';
+
+const searchQuery = gql(`
+    query Search($name: String!) {
+    search(name: $name) {
+        Search {
+        imdbID
+        Title
+        Year
+        }
+    }
+    }
+  `);
 
 const useStyles = makeStyles(() => ({
     toolBarContainer: {
@@ -23,25 +35,37 @@ const useStyles = makeStyles(() => ({
     }
 })
 );
+type Suggestion = {
+    Title: string;
+}
 
 export default function AppHeader() {
     const classes = useStyles();
     const router = useRouter();
-
+    const initialSuggestions: Suggestion[] = [];
     const [name, setName] = useState('');
+    const [getSuggestions, { data }] = useLazyQuery(searchQuery);
+    const [suggestions, setSuggestions] = useState(initialSuggestions);
 
-    const search = () => {
-        router.push(`/?s=${name}`);
+    const search = (_ = {}, value: string | null) => {
+        if (value) {
+            router.push(`/?s=${value}`);
+        }
     }
 
     const onKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
-            search();
+            router.push(`/?s=${name}`);
         }
     }
 
     const autoSuggest = async (_ = {}, value: string | null) => {
         const title = typeof value === 'string' ? value.trim() : '';
+        if (title) {
+            getSuggestions(
+                { variables: { name: title } },
+            )
+        }
         setName(title);
     }
 
@@ -50,7 +74,13 @@ export default function AppHeader() {
         const s = params.get('s') ? params.get('s') : '';
         const query = typeof s === 'string' ? s : '';
         setName(query);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (data && data.search.Search) {
+            setSuggestions(data.search.Search);
+        }
+    }, [data]);
 
     return (
         <AppBar position="static">
@@ -69,15 +99,13 @@ export default function AppHeader() {
                             freeSolo
                             selectOnFocus
                             clearOnBlur
-                            options={[]}
-                            // options={suggestions}
+                            options={suggestions.map(suggestion => (suggestion && suggestion.Title ? suggestion.Title : ''))}
                             onInputChange={(e, value) => autoSuggest(e, value)}
-                            // onChange={search}
+                            onChange={(e, value) => search(e, value)}
                             onKeyPress={(e) => onKeyPress(e)}
                             renderInput={(params) => (
                                 <Searchbar params={params} />
                             )}
-                            // getOptionLabel={(suggestion) => (suggestion.Title + suggestion.Year)}
                             value={name}
                         />
                     </Grid>

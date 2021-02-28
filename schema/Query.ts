@@ -54,7 +54,7 @@ export const GetByIdResult = objectType({
   }
 });
 
-type SearchResponse = { // root type
+export type SearchResponse = { // root type
   Response?: string | null; // String
   Search?: Array<NexusGenRootTypes['SearchResult'] | null> | null; // [SearchResult]
   totalResults?: number | null; // Int
