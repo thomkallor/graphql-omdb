@@ -28,11 +28,45 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Framework: { // root type
-    id?: string | null; // ID
-    name?: string | null; // String
+  GetByIdResult: { // root type
+    Actors?: string | null; // String
+    Awards?: string | null; // String
+    BoxOffice?: string | null; // String
+    Country?: string | null; // String
+    Director?: string | null; // String
+    Genre?: string | null; // String
+    Language?: string | null; // String
+    Metascore?: string | null; // String
+    Plot?: string | null; // String
+    Poster?: string | null; // String
+    Production?: string | null; // String
+    Rated?: string | null; // String
+    Ratings?: string | null; // String
+    Released?: string | null; // String
+    Response?: string | null; // String
+    Runtime?: string | null; // String
+    Title?: string | null; // String
+    Type?: string | null; // String
+    Writer?: string | null; // String
+    Year?: string | null; // String
+    imdbID?: string | null; // ID
+    imdbRating?: number | null; // Float
+    imdbVotes?: string | null; // String
+    totalSeasons?: string | null; // String
   }
   Query: {};
+  SearchResponse: { // root type
+    Response?: string | null; // String
+    Search?: Array<NexusGenRootTypes['SearchResult'] | null> | null; // [SearchResult]
+    totalResults?: number | null; // Int
+  }
+  SearchResult: { // root type
+    Poster?: string | null; // String
+    Title?: string | null; // String
+    Type?: string | null; // String
+    Year?: string | null; // String
+    imdbID?: string | null; // ID
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -46,26 +80,105 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Framework: { // field return type
-    id: string | null; // ID
-    name: string | null; // String
+  GetByIdResult: { // field return type
+    Actors: string | null; // String
+    Awards: string | null; // String
+    BoxOffice: string | null; // String
+    Country: string | null; // String
+    Director: string | null; // String
+    Genre: string | null; // String
+    Language: string | null; // String
+    Metascore: string | null; // String
+    Plot: string | null; // String
+    Poster: string | null; // String
+    Production: string | null; // String
+    Rated: string | null; // String
+    Ratings: string | null; // String
+    Released: string | null; // String
+    Response: string | null; // String
+    Runtime: string | null; // String
+    Title: string | null; // String
+    Type: string | null; // String
+    Writer: string | null; // String
+    Year: string | null; // String
+    imdbID: string | null; // ID
+    imdbRating: number | null; // Float
+    imdbVotes: string | null; // String
+    totalSeasons: string | null; // String
   }
   Query: { // field return type
-    frameworks: Array<NexusGenRootTypes['Framework'] | null> | null; // [Framework]
+    getById: NexusGenRootTypes['GetByIdResult'] | null; // GetByIdResult
+    search: NexusGenRootTypes['SearchResponse'] | null; // SearchResponse
+  }
+  SearchResponse: { // field return type
+    Response: string | null; // String
+    Search: Array<NexusGenRootTypes['SearchResult'] | null> | null; // [SearchResult]
+    totalResults: number | null; // Int
+  }
+  SearchResult: { // field return type
+    Poster: string | null; // String
+    Title: string | null; // String
+    Type: string | null; // String
+    Year: string | null; // String
+    imdbID: string | null; // ID
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Framework: { // field return type name
-    id: 'ID'
-    name: 'String'
+  GetByIdResult: { // field return type name
+    Actors: 'String'
+    Awards: 'String'
+    BoxOffice: 'String'
+    Country: 'String'
+    Director: 'String'
+    Genre: 'String'
+    Language: 'String'
+    Metascore: 'String'
+    Plot: 'String'
+    Poster: 'String'
+    Production: 'String'
+    Rated: 'String'
+    Ratings: 'String'
+    Released: 'String'
+    Response: 'String'
+    Runtime: 'String'
+    Title: 'String'
+    Type: 'String'
+    Writer: 'String'
+    Year: 'String'
+    imdbID: 'ID'
+    imdbRating: 'Float'
+    imdbVotes: 'String'
+    totalSeasons: 'String'
   }
   Query: { // field return type name
-    frameworks: 'Framework'
+    getById: 'GetByIdResult'
+    search: 'SearchResponse'
+  }
+  SearchResponse: { // field return type name
+    Response: 'String'
+    Search: 'SearchResult'
+    totalResults: 'Int'
+  }
+  SearchResult: { // field return type name
+    Poster: 'String'
+    Title: 'String'
+    Type: 'String'
+    Year: 'String'
+    imdbID: 'ID'
   }
 }
 
 export interface NexusGenArgTypes {
+  Query: {
+    getById: { // args
+      imdbID?: string | null; // String
+    }
+    search: { // args
+      name?: string | null; // String
+      page: number | null; // Int
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

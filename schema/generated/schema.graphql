@@ -2,11 +2,51 @@
 ### Do not make changes to this file directly
 
 
-type Framework {
-  id: ID
-  name: String
+type GetByIdResult {
+  Actors: String
+  Awards: String
+  BoxOffice: String
+  Country: String
+  Director: String
+  Genre: String
+  Language: String
+  Metascore: String
+  Plot: String
+  Poster: String
+  Production: String
+  Rated: String
+  Ratings: String
+  Released: String
+  Response: String
+  Runtime: String
+  Title: String
+  Type: String
+  Writer: String
+  Year: String
+  imdbID: ID
+  imdbRating: Float
+  imdbVotes: String
+  totalSeasons: String
 }
 
 type Query {
-  frameworks: [Framework]
+  """Get By Id"""
+  getById(imdbID: String): GetByIdResult
+
+  """search by name"""
+  search(name: String, page: Int = 1): SearchResponse
+}
+
+type SearchResponse {
+  Response: String
+  Search: [SearchResult]
+  totalResults: Int
+}
+
+type SearchResult {
+  Poster: String
+  Title: String
+  Type: String
+  Year: String
+  imdbID: ID
 }
